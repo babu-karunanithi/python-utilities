@@ -9,7 +9,7 @@ output = child.communicate()[0].strip().split(b"\n")
 for x in output[3:4]:
     if int(x.split()[-2][:-1]) >= threshold:
         message=str(x)
-        url = "https://hooks.slack.com/services/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"
+        url = your slack url
         payload = "{'text': '"+message+"'}"
         headers = { 'Content-Type': 'text/plain'}
         response = requests.request("POST", url, headers=headers, data = payload)

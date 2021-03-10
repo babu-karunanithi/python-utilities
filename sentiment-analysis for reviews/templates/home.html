@@ -1,0 +1,189 @@
+<html lang="en">
+   <head>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <title>Sentiment Analysis</title>
+      <!-- BootStrap -->
+      <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+      <!-- css -->
+      <link rel="stylesheet" href="static/css/styles.css">
+   </head>
+   <style>
+      * {
+      box-sizing: border-box;
+      }
+      input[type=text], select, textarea {
+      width: 100%;
+      padding: 12px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      resize: vertical;
+      }
+      label {
+      padding: 12px 12px 12px 0;
+      display: inline-block;
+      }
+      .container {
+      border-radius: 5px;
+      background-color: #f2f2f2;
+      padding: 20px;
+      }
+      .col-25 {
+      float: left;
+      width: 25%;
+      margin-top: 6px;
+      }
+      .col-75 {
+      float: left;
+      width: 75%;
+      margin-top: 6px;
+      }
+      /* Clear floats after the columns */
+      .row:after {
+      content: "";
+      display: table;
+      clear: both;
+      }
+      /* Responsive layout - when the screen is less than 600px wide, make the two columns stack on top of each other instead of next to each other */
+      @media screen and (max-width: 600px) {
+      .col-25, .col-75, input[type=submit] {
+      width: 100%;
+      margin-top: 0;
+      }
+      }
+   </style>
+   <body>
+      <!-- As a heading -->
+      <nav class="navbar navbar-inverse navbar-fixed-top">
+         <div class="container-fluid">
+            <div class="navbar-header"> <a class="navbar-brand" href="/">Product review sentimental Analysis</a>
+            </div>
+         </div>
+      </nav>
+      <br>
+      <div class="container">
+         <form action="\predict" method="post">
+            <div class="row">
+               <div class="col-sm-4">
+                  <div class="card">
+                     <div class="card-body">
+                        <!-- colour -->
+                        <h5 class="card-title">Colour</h5>
+                        <select name="colour" id="colour">
+                           <option value="Blue">Blue</option>
+                           <option value="White">White</option>
+                           <option value="Black">Black</option>
+                           <option value="Green">Green</option>
+                           <option value="RED">Red</option>
+                        </select>
+                     </div>
+                  </div>
+               </div>
+               <div class="col-sm-4">
+                  <div class="card">
+                     <div class="card-body">
+                        <!-- rating -->
+                        <h5 class="card-title">Rating</h5>
+                        <select name="rating" id="rating">
+                           <option value="1.0 out of 5 stars">1</option>
+                           <option value="2.0 out of 5 stars">2</option>
+                           <option value="3.0 out of 5 stars">3</option>
+                           <option value="4.0 out of 5 stars">4</option>
+                           <option value="5.0 out of 5 stars">5</option>
+                        </select>
+                     </div>
+                  </div>
+               </div>
+               <div class="col-sm-4">
+                  <div class="card">
+                     <div class="card-body">
+                        <h5 class="card-title">Storage Size</h5>
+                        <!-- storage size -->
+                        <select name="storage" id="storage">
+                           <option value="64GB">64GB</option>
+                           <option value="128GB">128GB</option>
+                           <option value="256GB">256GB</option>
+                        </select>
+                     </div>
+                  </div>
+               </div>
+            </div>
+            <br>
+            <!-- Submit -->
+            <input type="submit" value="Submit" class="btn btn-secondary">
+         </form>
+         <br>
+      </div>
+      <div class="container">
+         <h3 style="text-align: center;">Reviews</h3>
+         {% for prediction_text in prediction_text_list %}
+         <div>
+            <form >
+               <div class="row">
+                  <div class="col-25">
+                     <label style="font-weight: bolder;" for="fname">Title</label>
+                  </div>
+                  <div class="col-75">
+                     <input type="text" id="fname" name="firstname" value="{{ prediction_text.title }}" placeholder="Your name..">
+                  </div>
+               </div>
+               <div class="row">
+                  <div class="col-25">
+                     <label style="font-weight: bolder;" for="lname">Storage</label>
+                  </div>
+                  <div class="col-75">
+                     <input type="text" id="lname" name="lastname" value="{{ prediction_text.storage }}" placeholder="Your last name..">
+                  </div>
+               </div>
+               <div class="row">
+                  <div class="col-25">
+                     <label style="font-weight: bolder;" for="lname">Colour</label>
+                  </div>
+                  <div class="col-75">
+                     <input type="text" id="lname" name="lastname" value="{{ prediction_text.colour }}" placeholder="Your last name..">
+                  </div>
+               </div>
+               <div class="row">
+                  <div style="font-weight: bolder;" class="col-25">
+                     <label for="subject">Text</label>
+                  </div>
+                  <div class="col-75">
+                     <textarea style="overflow: scroll;" id="subject" name="subject"  placeholder="Write something.." style="height:200px">{{ prediction_text.text }}</textarea>
+                  </div>
+               </div>
+            </form>
+         </div>
+         {% endfor %}
+      </div>
+      <div class="container">
+         <form action="\predictReview" method="post">
+            <div class="row">
+               <div class="col-sm-12">
+                  <div class="card">
+                     <div class="card-body">
+                        <!-- colour -->
+                        <textarea id="review" placeholder="Enter text here..." name="review" rows="5" cols="100">{{review_text}}</textarea>
+                     </div>
+                  </div>
+               </div>
+            </div>
+            <br>
+            <!-- Submit -->
+            <input type="submit" value="submit" class="btn btn-secondary">
+         </form>
+         <br>
+		 <h2>Sentimental Anlysis -Explanation</h2>
+		 <div style="font-weight: bolder;" class="col-50">
+			<label>1 - Positive review content</label>
+		 </div>
+		 <div style="font-weight: bolder;" class="col-50">
+			<label >0 - Negative review content</label>
+		 </div>
+         <h3 style="background-color: #FFFF00">{{ reviews_out }}</h3>
+      </div>
+      <!-- JavaScript -->
+      <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+      <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+      <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js" integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" crossorigin="anonymous"></script>
+   </body>
+</html>
